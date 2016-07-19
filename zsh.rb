@@ -17,8 +17,14 @@ dep 'zsh - oh-my-zsh' do
   meet { git 'git@github.com:robbyrussell/oh-my-zsh.git', to: '~/.oh-my-zsh' }
 end
 
-dep 'zsh - powerlevel9k', template: 'zsh_theme' do
-  repo 'git@github.com:bhilburn/powerlevel9k.git'
+# dep 'zsh - powerlevel9k', template: 'zsh_theme' do
+#   user 'bhilburn'
+#   repo 'powerlevel9k'
+# end
+
+dep 'zsh - iterm2 integration' do
+  met? { ('~' / '.iterm2_shell_integration.zsh').exist? }
+  meet { shell "curl -L https://iterm2.com/misc/zsh_startup.in >> ~/.iterm2_shell_integration.zsh" }
 end
 
 dep 'zshrc.dotfile'
@@ -28,6 +34,8 @@ dep 'zsh' do
   requires 'zsh - system shell'
   requires 'zsh - user shell'
   requires 'zsh - oh-my-zsh'
-  requires 'zsh - powerlevel9k'
+  # requires 'zsh - powerlevel9k'
+  requires 'powerline-status.pip'
+  requires 'zsh - iterm2 integration'
   requires 'zshrc.dotfile'
 end

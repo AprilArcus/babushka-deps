@@ -1,0 +1,1 @@
+dep 'powerline-status.pip'
