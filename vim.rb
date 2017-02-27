@@ -24,9 +24,29 @@ dep 'vim - solarized', template: 'pathogen' do
   repo 'vim-colors-solarized'
 end
 
+dep 'vim - nerdtree', template: 'pathogen' do
+  user 'scrooloose'
+  repo 'nerdtree'
+end
+
+dep 'vim - vim-airline', template: 'pathogen' do
+  user 'vim-airline'
+  repo 'vim-airline'
+end
+
+dep 'vim - vim-airline-themes', template: 'pathogen' do
+  user 'vim-airline'
+  repo 'vim-airline-themes'
+end
+
 dep 'vim - python' do
   met? { shell? 'vim --version | grep +python' }
   meet { unmeetable! }
+end
+
+dep 'vim - vim-javascript', template: 'pathogen' do
+  user 'pangloss'
+  repo 'vim-javascript'
 end
 
 dep 'vimrc.dotfile'
@@ -34,7 +54,10 @@ dep 'vimrc.dotfile'
 dep 'vim' do
   # requires 'vim.managed'
   requires 'vim - pathogen'
-  requires 'vim - solarized'
+  # requires 'vim - solarized'
+  requires 'vim - vim-javascript'
+  # requires 'vim - vim-airline'
+  # requires 'vim - vim-airline-themes'
   requires 'vim - vitality'
   requires 'vim - python'
   requires 'powerline-status.pip'

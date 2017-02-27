@@ -10,6 +10,14 @@ def add_italic_escape_codes terminfo
   [terminfo, "\tsitm=\033[3m,", "\tritm=\033[23m,"].join("\n")
 end
 
+def has_correct_backspace? terminfo
+  terminfo !~ /kbs=\^H/
+end
+
+def fix_backspace terminfo
+  terminfo.sub(/kbs=\^H/, 'kbs=\\\\177')
+end
+  
 def has_terminfo? source
   shell? "infocmp #{source}"
 end
@@ -51,6 +59,18 @@ dep 'terminfo - xterm-256color has italics' do
   end
 end
 
+dep 'terminfo - xterm-256color has correct backspace' do
+  requires 'terminfo - xterm-256color exists'
+  met? do
+    has_correct_backspace? get_terminfo('xterm-256color')
+  end
+  meet do
+    terminfo = get_terminfo 'xterm-256color'
+    italicized = fix_backspace terminfo
+    write_terminfo italicized
+  end
+end
+
 dep 'terminfo - screen-256color exists' do
   met? { has_terminfo? 'screen-256color' }
 end
@@ -63,6 +83,18 @@ dep 'terminfo - screen-256color has italics' do
   meet do
     terminfo = get_terminfo 'screen-256color'
     italicized = add_italic_escape_codes terminfo
+    write_terminfo italicized
+  end
+end
+
+dep 'terminfo - screen-256color has correct backspace' do
+  requires 'terminfo - screen-256color exists'
+  met? do
+    has_correct_backspace? get_terminfo('screen-256color')
+  end
+  meet do
+    terminfo = get_terminfo 'screen-256color'
+    italicized = fix_backspace terminfo
     write_terminfo italicized
   end
 end
@@ -91,8 +123,26 @@ dep 'terminfo - tmux has italics' do
   end
 end
 
+dep 'terminfo - tmux has correct backspace' do
+  requires 'terminfo - tmux exists'
+  met? do
+    has_correct_backspace? get_terminfo('tmux')
+  end
+  meet do
+    terminfo = get_terminfo 'tmux'
+    italicized = fix_backspace terminfo
+    write_terminfo italicized
+  end
+end
+
 dep 'terminfo has italics' do
   requires 'terminfo - xterm-256color has italics'
   requires 'terminfo - screen-256color has italics'
   requires 'terminfo - tmux has italics'
+end
+
+dep 'terminfo has correct backspace' do
+  requires 'terminfo - xterm-256color has correct backspace'
+  requires 'terminfo - screen-256color has correct backspace'
+  requires 'terminfo - tmux has correct backspace'
 end
